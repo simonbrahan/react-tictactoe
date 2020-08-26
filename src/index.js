@@ -24,7 +24,7 @@ class Board extends React.Component {
 
   handleClick (i) {
     const squares = this.state.squares.slice();
-    squares[i] = this.state.xIsNext ? "X" : "O";
+    squares[i] = this.nextPlayer();
     this.setState({ squares: squares, xIsNext: !this.state.xIsNext });
   }
 
@@ -33,6 +33,10 @@ class Board extends React.Component {
       value={ this.state.squares[i] }
       onClick={ () => this.handleClick(i) }
     />;
+  }
+
+  nextPlayer () {
+    return this.state.xIsNext ? 'X' : 'O';
   }
 
   render() {
