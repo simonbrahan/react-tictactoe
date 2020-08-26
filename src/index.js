@@ -23,6 +23,11 @@ class Board extends React.Component {
   }
 
   handleClick (i) {
+    // If game is over or square is filled, ignore click
+    if (calculateWinner(this.state.squares) || this.state.squares[i]) {
+        return;
+    }
+
     const squares = this.state.squares.slice();
     squares[i] = this.nextPlayer();
     this.setState({ squares: squares, xIsNext: !this.state.xIsNext });
@@ -40,7 +45,11 @@ class Board extends React.Component {
   }
 
   render() {
-    const status = 'Next player: ' + this.nextPlayer();
+    const winner = calculateWinner(this.state.squares);
+
+    const status = winner ?
+        'Winner: ' + winner :
+        'Next player: ' + this.nextPlayer();
 
     return (
       <div>
@@ -81,7 +90,29 @@ class Game extends React.Component {
   }
 }
 
-// ========================================
+function calculateWinner (squares) {
+    const possibleLines = [
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 5, 8],
+        [0, 4, 8],
+        [2, 4, 6]
+    ];
+
+    for (let i=0; i<possibleLines.length; i++) {
+        const [a, b, c] = possibleLines[i];
+        // If first square has been filled in, and all squares match, we have a winner!
+        if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+            return squares[a];
+        }
+    }
+
+    // If not, we don't.
+    return null;
+}
 
 ReactDOM.render(
   <Game />,
