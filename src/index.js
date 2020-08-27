@@ -14,42 +14,19 @@ function Square (props) {
 }
 
 class Board extends React.Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-        squares: Array(9).fill(null),
-        xIsNext: false
-    };
-  }
-
-  handleClick (i) {
-    // If game is over or square is filled, ignore click
-    if (calculateWinner(this.state.squares) || this.state.squares[i]) {
-        return;
-    }
-
-    const squares = this.state.squares.slice();
-    squares[i] = this.nextPlayer();
-    this.setState({ squares: squares, xIsNext: !this.state.xIsNext });
-  }
-
   renderSquare(i) {
     return <Square
-      value={ this.state.squares[i] }
-      onClick={ () => this.handleClick(i) }
+      value={ this.props.squares[i] }
+      onClick={ () => this.props.onClick(i) }
     />;
   }
 
-  nextPlayer () {
-    return this.state.xIsNext ? 'X' : 'O';
-  }
-
   render() {
-    const winner = calculateWinner(this.state.squares);
+    const winner = calculateWinner(this.props.squares);
 
     const status = winner ?
         'Winner: ' + winner :
-        'Next player: ' + this.nextPlayer();
+        'Next player: ' + this.props.xIsNext ? 'X' : 'O';
 
     return (
       <div>
@@ -75,11 +52,33 @@ class Board extends React.Component {
 }
 
 class Game extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      squares: Array(9).fill(null),
+      xIsNext: false
+    };
+  }
+
+  handleClick (i) {
+    // If game is over or square is filled, ignore click
+    if (calculateWinner(this.state.squares) || this.state.squares[i]) {
+        return;
+    }
+
+    const squares = this.state.squares.slice();
+    squares[i] = this.state.xIsNext ? 'X' : 'O';
+    this.setState({ squares: squares, xIsNext: !this.state.xIsNext });
+  }
+
   render() {
     return (
       <div className="game">
         <div className="game-board">
-          <Board />
+          <Board
+            squares={ this.state.squares }
+            onClick={ (i) => this.handleClick(i) }
+          />
         </div>
         <div className="game-info">
           <div>{/* status */}</div>
