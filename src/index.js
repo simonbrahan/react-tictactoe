@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-function Square (props) {
+function Square(props) {
   return (
     <button
       className="square"
@@ -57,7 +57,7 @@ class Game extends React.Component {
     return this.state.xIsNext ? 'X' : 'O';
   }
 
-  handleClick (i) {
+  handleClick(i) {
     const current = this.state.history[this.state.history.length - 1];
     const squares = current.squares.slice();
 
@@ -98,7 +98,7 @@ class Game extends React.Component {
   }
 }
 
-function calculateWinner (squares) {
+function calculateWinner(squares) {
     const possibleLines = [
         [0, 1, 2],
         [3, 4, 5],
