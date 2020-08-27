@@ -22,15 +22,8 @@ class Board extends React.Component {
   }
 
   render() {
-    const winner = calculateWinner(this.props.squares);
-
-    const status = winner ?
-        'Winner: ' + winner :
-        'Next player: ' + this.props.xIsNext ? 'X' : 'O';
-
     return (
       <div>
-        <div className="status">{status}</div>
         <div className="board-row">
           {this.renderSquare(0)}
           {this.renderSquare(1)}
@@ -60,6 +53,10 @@ class Game extends React.Component {
     };
   }
 
+  nextPlayer() {
+    return this.state.xIsNext ? 'X' : 'O';
+  }
+
   handleClick (i) {
     // If game is over or square is filled, ignore click
     if (calculateWinner(this.state.squares) || this.state.squares[i]) {
@@ -67,11 +64,17 @@ class Game extends React.Component {
     }
 
     const squares = this.state.squares.slice();
-    squares[i] = this.state.xIsNext ? 'X' : 'O';
+    squares[i] = this.nextPlayer();
     this.setState({ squares: squares, xIsNext: !this.state.xIsNext });
   }
 
   render() {
+    const winner = calculateWinner(this.state.squares);
+
+    const status = winner ?
+        'Winner: ' + winner :
+        'Next player: ' + this.nextPlayer();
+
     return (
       <div className="game">
         <div className="game-board">
@@ -81,7 +84,7 @@ class Game extends React.Component {
           />
         </div>
         <div className="game-info">
-          <div>{/* status */}</div>
+          <div>{ status }</div>
           <ol>{/* TODO */}</ol>
         </div>
       </div>
